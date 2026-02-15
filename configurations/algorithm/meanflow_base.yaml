@@ -1,0 +1,47 @@
+defaults:
+  - base_pytorch_algo
+
+# dataset-dependent configurations
+x_shape: ${dataset.observation_shape}
+frame_stack: 1
+frame_skip: 1
+data_mean: ${dataset.data_mean}
+data_std: ${dataset.data_std}
+external_cond_dim: 0 #${dataset.action_dim}
+context_frames: ${dataset.context_length}
+# training hyperparameters
+weight_decay: 1e-4
+warmup_steps: 20000
+optimizer_beta: [0.9, 0.999]
+# flow-related
+uncertainty_scale: 1
+guidance_scale: 0.0
+chunk_size: 1 # -1 for full trajectory flow, number to specify flow chunk size
+scheduling_matrix: autoregressive
+inter_time: random_all # random_all or uniform
+inter_time_dist: log_norm
+inter_time_mean: -0.4 # for log_norm
+inter_time_std: 1
+causal: True
+num_gen_trials: 1
+prediction_horizon: ${experiment.validation.prediction_horizon}
+
+meanflow:
+  # training
+  objective: pred_ave_v # only support pred_v for flow matching now
+  clip_noise: 20.0
+  use_snr: False
+  use_cum_snr: False
+  use_fused_snr: False
+  snr_clip: 5.0
+  cum_snr_decay: 0.98
+  timesteps: 1000 # FIXME
+  # sampling
+  sampling_timesteps: 1
+  stabilization_level: 1
+  proportion: 0.5 # proportion of r\neq t. If set to 0, then it should reduce to regular flow matching
+  # architecture
+  architecture:
+    network_size: 64
+  numerical_stabilizer: 1e-4
+  solver_style: ave_v # [ins_v, ave_v]

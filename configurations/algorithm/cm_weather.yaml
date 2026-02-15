@@ -1,0 +1,44 @@
+defaults:
+  - df_base
+
+n_frames: ${dataset.n_frames}
+frame_skip: ${dataset.frame_skip}
+metadata: ${dataset.metadata}
+data_save_dir: None
+
+# training hyperparameters
+weight_decay: 2e-3
+warmup_steps: 10000
+optimizer_beta: [0.9, 0.99]
+
+
+# inference hyperparameters
+open_loop_horizon: 1
+chunk_size: -1 # 1 (autoregressive) or len(prediction_window)
+scheduling_matrix: full_sequence
+
+training_max_steps: ${experiment.training.max_steps}
+
+diffusion:
+  # training
+  objective: pred_x0
+  beta_schedule: sigmoid
+  use_fused_snr: True
+  cum_snr_decay: 0.96
+  clip_noise: 6.
+  # sampling
+  ddim_sampling_eta: 0.0
+  sampling_timesteps: 1
+  stabilization_level: 1 # w.r.t. total timesteps (1000 by default)
+  # architecture
+  architecture:
+    network_size: 64
+    attn_heads: 4
+    attn_dim_head: 64
+    #dim_mults: [1, 2, 4, 8]
+    dim_mults: [1, 2] # a more light-weight model
+    resolution: ${dataset.resolution}
+    attn_resolutions: [16, 32, 64, 128]
+    use_init_temporal_attn: True
+    use_linear_attn: True
+    time_emb_type: rotary

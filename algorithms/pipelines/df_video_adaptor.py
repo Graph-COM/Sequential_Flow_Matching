@@ -1,0 +1,16 @@
+from omegaconf import DictConfig
+from ..base_model.df_base_adaptor import DiffusionAdaptor
+from ..base_task.video_adaptation_task import VideoAdaptionTask
+import torch
+from lightning.pytorch.utilities.types import STEP_OUTPUT
+import torch.nn.functional as F
+
+class DiffusionForcingVideoFineTuner(VideoAdaptionTask):
+    """
+    A fine-tuning version of FlowMatchingVideo that loads a pretrained checkpoint
+    and creates a copy for fine-tuning while keeping the original model intact.
+    """
+
+    def __init__(self, cfg: DictConfig):
+        super().__init__(cfg)
+        self.model = DiffusionAdaptor(cfg)

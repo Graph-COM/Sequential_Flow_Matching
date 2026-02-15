@@ -1,0 +1,16 @@
+defaults:
+  - base_dataset
+
+save_dir: data/ssm
+n_frames: 100
+observation_shape: [3]
+state_dim: 3
+
+r: 20
+q: 40
+v: 20
+
+observation_mean: "data/ssm/data_lor_v${dataset.v}_rq${dataset.r}${dataset.q}_T${dataset.n_frames}_observation_mean.npy"
+observation_std: "data/ssm/data_lor_v${dataset.v}_rq${dataset.r}${dataset.q}_T${dataset.n_frames}_observation_std.npy"
+state_mean: "data/ssm/data_lor_v${dataset.v}_rq${dataset.r}${dataset.q}_T${dataset.n_frames}_state_mean.npy"
+state_std: "data/ssm/data_lor_v${dataset.v}_rq${dataset.r}${dataset.q}_T${dataset.n_frames}_state_std.npy"

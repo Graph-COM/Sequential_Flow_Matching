@@ -1,0 +1,48 @@
+defaults:
+  - df_base
+
+# dataset info
+data_save_dir: None
+data_mean: null
+data_std: null
+observation_shape: ${dataset.observation_shape}
+state_dim: ${dataset.state_dim}
+observation_mean: ${dataset.observation_mean}
+observation_std: ${dataset.observation_std}
+state_mean: ${dataset.state_mean}
+state_std: ${dataset.state_std}
+n_frames: ${dataset.n_frames}
+
+# non dataset info
+x_shape: null
+frame_stack: 1
+frame_skip: 1
+# data_mean: ${dataset.data_mean}
+# data_std: ${dataset.data_std}
+external_cond_dim: 3
+context_frames: 0
+
+
+open_loop_horizon: 1
+causal: True # let us try causality for simulation
+
+# training hyperparameters
+weight_decay: 1e-4
+warmup_steps: 10000
+# diffusion-related
+#chunk_size: ${dataset.episode_len}
+chunk_size: -1 # 1 (autoregressive) or len(prediction_window)
+scheduling_matrix: full_sequence
+
+
+diffusion:
+  beta_schedule: sigmoid
+  stabilization_level: 1
+  objective: pred_x0
+  sampling_timesteps: 10
+
+  architecture:
+    network_size: 64
+    num_layers: 6
+    attn_heads: 4
+    dim_feedforward: 128

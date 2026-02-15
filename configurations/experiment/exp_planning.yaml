@@ -1,0 +1,22 @@
+defaults:
+  - base_pytorch
+
+training:
+  lr: 5e-4
+  precision: 16-mixed
+  batch_size: 1024 # will use 16G GPU memory;
+  max_steps: 100005 # 50k steps should be enough for large, and 100k for medium
+  max_epochs: -1
+
+  checkpointing:
+    every_n_train_steps: 10000 # save a checkpoint every n train steps
+    every_n_epochs: null # save a checkpoint every n epochs
+
+validation:
+  precision: 32
+  inference_mode: False
+  batch_size: 12
+  val_every_n_step: 2000 # change to 1 when visualizing a trained checkpoint
+  val_every_n_epoch: null # change to null when visualizing a trained checkpoint
+  limit_batch: 1
+  prediction_horizon: 600 # FIXME

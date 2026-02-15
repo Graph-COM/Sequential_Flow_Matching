@@ -1,0 +1,41 @@
+defaults:
+  - flow_weather
+
+# Fine-tuning specific configurations
+fine_tuning_mode: true
+update_strategy: fixed_horizon # fixed_horizon, shrinking_horizon
+#fine_tuning_method: predictor_residual # predictor_residual, predictor_denoising, flow_matching
+fine_tuning_method: flow_matching # predictor_residual, predictor_denoising, flow_matching
+fine_tuning_teacher_forcing: ground_truth # ground_truth, updated_prediction
+n_fine_tuning_data: 30000
+
+
+# key parameters for flow matching finetuning
+# for training
+lr: 8e-6
+warmup_steps: 20000
+renoise_level: 200 # how much noises added to old prediction. All w.r.t. timesteps (1000 by default)
+renoise_factor_of_lead_time: constant # constant, linear
+flow_time: 200 # maximal flow time used to "denoise" the noisy old prediction
+flow_time_factor_of_lead_time: constant # constant, linear
+train_on_context: False # if to train to predict context as well
+last_frame_update: from_prev_frame # from_noise or from_prev_frame
+# for inference
+update_scheduling_matrix: shortest # autoregressive, full_sequence, pyramid
+update_chunk_size: -1 # update how many steps in each update run. Set -1 to full size
+update_sampling_timesteps: 1
+
+# Override training parameters for fine-tuning
+#lr: 1e-4  # Lower learning rate for fine-tuning
+#weight_decay: 1e-3  # Different weight decay for fine-tuning
+#optimizer_beta: [0.9, 0.99]
+
+
+
+# Inference parameters for fine-tuning
+open_loop_horizon: 1  # Different horizon for fine-tuning
+update_filtering: false
+
+
+flow:
+  use_snr_reweight: True

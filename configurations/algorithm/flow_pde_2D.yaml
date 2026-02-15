@@ -1,0 +1,67 @@
+defaults:
+  - flow_base
+
+# dataset info
+data_save_dir: None
+data_mean: null
+data_std: null
+observation_shape: ${dataset.observation_shape}
+observation_mean: ${dataset.observation_mean}
+observation_std: ${dataset.observation_std}
+
+control_shape: ${dataset.control_shape}
+control_mean: ${dataset.control_mean}
+control_std: ${dataset.control_std}
+episode_len: ${dataset.episode_len}
+rescaler: ${dataset.rescaler}
+random_obstacle: ${dataset.random_obstacle}
+
+
+# non dataset info
+# If set to control_shape then the model will just predict the control (ablation)
+x_shape: [6, "${dataset.resolution}", "${dataset.resolution}"] # control_shape or [6, "${dataset.resolution}", "${dataset.resolution}"]
+frame_stack: 1
+frame_skip: 1
+# data_mean: ${dataset.data_mean}
+# data_std: ${dataset.data_std}
+# Need to be modified
+external_cond_dim: [1, "${dataset.resolution}", "${dataset.resolution}"]
+context_frames: 1
+
+open_loop_horizon: 1
+prediction_horizon: 10 #training default 10
+causal: True # let us try causality for simulation
+plot_start_goal: True
+padding_mode: same
+
+# training hyperparameters
+weight_decay: 1e-4
+warmup_steps: 10000
+# diffusion-related
+#chunk_size: ${dataset.episode_len}
+chunk_size: -1 # 1 (autoregressive) or len(prediction_window)
+scheduling_matrix: full_sequence
+guidance_scale: 0. #1000
+
+# evaluation mode
+# sliding_window: True
+fast_eval: True
+save_plots: False
+save_plots_dir: plot/flow_fixed_smoke
+
+flow:
+  stabilization_level: 1
+  beta_schedule: linear
+  objective: pred_x0
+  sampling_timesteps: 10 #100
+
+  architecture:
+    network_size: 64
+    attn_heads: 4
+    attn_dim_head: 64
+    dim_mults: [1, 2]
+    resolution: ${dataset.resolution}
+    attn_resolutions: [16, 32, 64, 128]
+    use_init_temporal_attn: True
+    use_linear_attn: True
+    time_emb_type: rotary

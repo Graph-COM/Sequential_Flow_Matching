@@ -1,0 +1,18 @@
+defaults:
+  - base_dataset
+
+save_dir: data/pde
+rescaler: 10
+stack_u_and_f: True 
+pad_for_2d_conv: True 
+partially_observed_fill_zero_unobserved: null 
+episode_len: 15
+observation_shape: [128] #u and f in Burgers equation
+#control_dim: 128
+control_dim: 0
+u_target: True
+
+observation_mean: "data/pde/observation_mean.npy"
+observation_std: "data/pde/observation_std.npy"
+control_mean: "data/pde/control_mean.npy"
+control_std: "data/pde/control_std.npy"

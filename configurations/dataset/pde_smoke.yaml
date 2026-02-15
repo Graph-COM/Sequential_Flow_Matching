@@ -1,0 +1,30 @@
+defaults:
+  - base_dataset
+
+save_dir: data/smoke
+# density/ velocity_x/ velocity_y/ smoke/ control_x/ control_y/
+rescaler: [1, 45, 50, 1, 45, 50]
+episode_len: 64
+horizon: 10
+frame_skip: 1
+resolution: 64
+true_size: 128
+observation_shape: [4, "${dataset.resolution}", "${dataset.resolution}"]
+control_shape: [2, "${dataset.resolution}", "${dataset.resolution}"]
+all_shape: [6, "${dataset.resolution}", "${dataset.resolution}"]
+u_target: True
+
+observation_mean: null
+observation_std: null
+control_mean: null
+control_std: null
+
+partially_observed_fill_zero_unobserved: null
+
+# For finetune dataset generation: specify the range of sim_ids to use
+# Format: [start, end] where both start and end are inclusive
+# Example: [0, 99] will use sim_000000 through sim_000099
+finetune_sim_range:  [36000, 39999]
+
+# Enable random obstacles from /data/smoke/random_obstacle.npy
+random_obstacle: False

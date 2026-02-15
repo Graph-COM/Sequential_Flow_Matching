@@ -1,0 +1,26 @@
+defaults:
+  - base_pytorch
+
+tasks: [training]
+
+training:
+  lr: 8e-5
+  precision: 32
+  batch_size: 16 #2048 # will use 16G GPU memory;
+  max_steps: 125000 #15005
+  max_epochs: -1
+
+  checkpointing:
+    every_n_train_steps: 5000
+    save_last: True # save the last checkpoint (no monitor needed)
+    # save top-k based on a metric:
+    save_top_k: 1
+    # monitor: "validation/control_obj_final"  # or another metric name
+
+validation:
+  precision: 32
+  inference_mode: False
+  batch_size: 16
+  val_every_n_step: 5000 # change to 1 when visualizing a trained checkpoint
+  val_every_n_epoch: null # change to null when visualizing a trained checkpoint
+  limit_batch: null

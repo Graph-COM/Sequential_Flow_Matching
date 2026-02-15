@@ -1,0 +1,50 @@
+defaults:
+  - base_pytorch_algo
+
+# dataset-dependent configurations
+x_shape: ${dataset.observation_shape}
+frame_stack: 1
+frame_skip: 1
+data_mean: ${dataset.data_mean}
+data_std: ${dataset.data_std}
+external_cond_dim: 0 #${dataset.action_dim}
+context_frames: ${dataset.context_length}
+# training hyperparameters
+weight_decay: 1e-4
+warmup_steps: 10000
+optimizer_beta: [0.9, 0.999]
+# diffusion-related
+uncertainty_scale: 1
+guidance_scale: 0.0
+chunk_size: 1 # -1 for full trajectory diffusion, number to specify diffusion chunk size
+scheduling_matrix: autoregressive
+noise_level: random_all
+noise_level_dist: uniform
+noise_level_mean: 0 # for log_norm
+noise_level_std: 1
+causal: True
+prediction_horizon: ${experiment.validation.prediction_horizon}
+num_gen_trials: 1
+context_mask: False
+
+diffusion:
+  # training
+  objective: pred_x0
+  beta_schedule: cosine
+  schedule_fn_kwargs: {}
+  clip_noise: 20.0
+  use_snr: False
+  use_cum_snr: False
+  use_fused_snr: False
+  snr_clip: 5.0
+  cum_snr_decay: 0.98
+  snr_reweight: min_snr
+  use_snr_reweight: True
+  timesteps: 1000
+  # sampling
+  sampling_timesteps: 50
+  ddim_sampling_eta: 1.0
+  stabilization_level: 1 # 1 means no stabilization
+  # architecture
+  architecture:
+    network_size: 64

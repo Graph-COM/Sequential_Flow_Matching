@@ -1,0 +1,44 @@
+defaults:
+  - flow_base
+
+# dataset info
+data_save_dir: None
+data_mean: null
+data_std: null
+reward_mean: ${dataset.reward_mean}
+reward_std: ${dataset.reward_std}
+observation_mean: ${dataset.observation_mean}
+observation_std: ${dataset.observation_std}
+action_mean: ${dataset.action_mean}
+action_std: ${dataset.action_std}
+gamma: ${dataset.gamma}
+episode_len: ${dataset.episode_len}
+env_id: ${dataset.env_id}
+
+# non dataset info
+x_shape: null
+frame_stack: 10
+context_frames: 1
+open_loop_horizon: 50
+use_reward: False
+causal: False
+plot_start_goal: True
+padding_mode: same
+
+# training hyperparameters
+weight_decay: 1e-4
+warmup_steps: 10000
+# diffusion-related
+guidance_scale: 2.0
+chunk_size: ${dataset.episode_len}
+scheduling_matrix: pyramid
+
+flow:
+  stabilization_level: 10
+  objective: pred_x0
+
+  architecture:
+    network_size: 128
+    num_layers: 12
+    attn_heads: 4
+    dim_feedforward: 512
